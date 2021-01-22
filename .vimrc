@@ -50,20 +50,21 @@ nnoremap <space> za
 
 let g:SimpylFold_docstring_preview=1
 
-au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=79
-    \ set expandtab
-    \ set autoindent
-    \ set fileformat=unix
+au BufNewFile,BufRead *.py;
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix |
 
-au BufNewFile,BufRead *.js, *.html, *.css
-    \ set tabstop=2
-    \ set softtabstop=2
-    \ set shiftwidth=2
+au BufNewFile,BufRead *.js, *.html, *.css;
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
 
+highlight BadWhitespace ctermbg=red guibg=darkred
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 set encoding=utf-8
@@ -95,4 +96,5 @@ call togglebg#map("<F5>")
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
 set nu
-
+" Running python3 from vim directly using <F4>. Also saves the file
+imap <F4> <Esc>:w<CR>:!clear;python3 %<CR>
