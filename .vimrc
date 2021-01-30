@@ -50,7 +50,7 @@ nnoremap <space> za
 
 let g:SimpylFold_docstring_preview=1
 
-au BufNewFile,BufRead *.py;
+au BufNewFile,BufRead *.py: 
     \ set tabstop=4 |
     \ set softtabstop=4 |
     \ set shiftwidth=4 |
@@ -59,7 +59,7 @@ au BufNewFile,BufRead *.py;
     \ set autoindent |
     \ set fileformat=unix |
 
-au BufNewFile,BufRead *.js, *.html, *.css;
+au BufNewFile,BufRead *.js,*.html,*.css: 
     \ set tabstop=2 |
     \ set softtabstop=2 |
     \ set shiftwidth=2 |
@@ -75,11 +75,16 @@ map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "python with virtualenv support
 python3 << EOF
 import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
+import subprocess
+
+if "VIRTUAL_ENV" in os.environ:
+    project_base_dir = os.environ["VIRTUAL_ENV"]
+    script = os.path.join(project_base_dir, "bin/activate")
+    pipe = subprocess.Popen(". %s; env" % script, stdout=subprocess.PIPE, shell=True)
+    output = pipe.communicate()[0].decode('utf8').splitlines()
+    env = dict((line.split("=", 1) for line in output))
+    os.environ.update(env)
+
 EOF
 
 let python_highlight_all=1
@@ -98,3 +103,14 @@ let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 set nu
 " Running python3 from vim directly using <F4>. Also saves the file
 imap <F4> <Esc>:w<CR>:!clear;python3 %<CR>
+
+"Configuring syntax highlight for js
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_ngdoc = 1
+let g:javascript_plugin_flow = 1
+
+augroup javascript_folding
+    au!
+    au FileType javascript setlocal foldmethod=syntax
+augroup END
+
